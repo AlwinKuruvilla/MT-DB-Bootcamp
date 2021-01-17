@@ -196,10 +196,23 @@ VALUES
     (4, 'Purple Pumpkin Pie', 'pies'),
     (5, 'Tripleboot Ale', 'liters'),
     (6, 'Blue Forest Lager', 'liters'),
-    (7, 'Pinefinger Nuts', 'kilograms')
+    (7, 'Pinefinger Nuts', 'bags');
 
 
 INSERT INTO Inventory
     (InventoryID, TavernID, SupplyID, DateUpdated, Count)
 VALUES
-    (1, 2, 1)
+    (1, 2, 1, '2020-03-02', 5),
+    (2, 3, 4, '2020-03-05', 2),
+    (3, 2, 6, '2020-03-01', 6),
+    (4, 4, 7, '2020-03-02', 3),
+    (5, 5, 3, '2020-03-09', 5);
+
+INSERT INTO Receivables
+    (ReceivablesID, SupplyID, TavernID, Cost, AmountReceived, DateReceived)
+VALUES
+    (1, 1, 3, 60.00, 2, '2020-05-06'),
+    (2, 4, 4, 58.25, 3, '2020-04-17'),
+    (3, 2, 3, 48.26, 2, '2020-05-28'),
+    (4, 1, 1, 100.36, 5, '2020-05-01'),
+    (5, 2, 2, 154.03, 10, '2020-04-29');
