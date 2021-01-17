@@ -111,11 +111,18 @@ VALUES
 --Homework 1--
 --------------
 DROP TABLE IF EXISTS Receivables;
-DROP TABLE IF EXISTS Supplies;
 DROP TABLE IF EXISTS Inventory;
+DROP TABLE IF EXISTS Supplies;
 DROP TABLE IF EXISTS ServiceStatus;
-DROP TABLE IF EXISTS Services;
 DROP TABLE IF EXISTS Sales;
+DROP TABLE IF EXISTS Services;
+
+CREATE TABLE Services
+(
+    ServiceID   int,
+    ServiceName nvarchar(50),
+    ServicePrice    decimal(18,2)
+);
 
 CREATE TABLE Sales
 (
@@ -128,18 +135,18 @@ CREATE TABLE Sales
     AmountPurchased int
 );
 
-CREATE TABLE Services
-(
-    ServiceID   int,
-    ServiceName nvarchar(50),
-    ServicePrice    decimal(18,2)
-);
-
 CREATE TABLE ServiceStatus
 (
     StatusID    int,
     StatusName  nvarchar(50),
     ServiceID   int
+);
+
+CREATE TABLE Supplies
+(
+    SupplyID    int,
+    SupplyName  nvarchar(50),
+    SupplyUnit  nvarchar(50)
 );
 
 CREATE TABLE Inventory
@@ -151,13 +158,6 @@ CREATE TABLE Inventory
     Count       int
 );
 
-CREATE TABLE Supplies
-(
-    SupplyID    int,
-    SupplyName  nvarchar(50),
-    SupplyUnit  nvarchar(50)
-)
-
 CREATE TABLE Receivables
 (
     ReceivablesID   int,
@@ -166,4 +166,40 @@ CREATE TABLE Receivables
     Cost            decimal(18,2),
     AmountReceived  int,
     DateReceived    date
-)
+);
+
+INSERT INTO Services
+    (ServiceID, ServiceName, ServicePrice)
+VALUES
+    (1, 'Armor Polishing', 300.00),
+    (2, 'Weapon Sharping', 250.00),
+    (3, 'Gems and Jewelry', 100.00),
+    (4, 'Pool', 50.00),
+    (5, 'Weapon Forging', 100.50),
+    (6, 'Buffet', 50.00),
+    (7, 'Darts', 25.00);
+
+INSERT INTO Sales
+    (SalesID, TavernID, ServiceID, DatePurchased, GuestName, Price, AmountPurchased)
+VALUES
+    (1,2,2, '2020-03-05','Arthur Pendragon', 500.00, 2),
+    (2, 3, 3, '2020-03-03','Cassandra Turtlefoot', 300.00, 3),
+    (3, 1, 7, '2020-03-06', 'James Smith', 150.00, 6),
+    (4, 5, 6, '2020-03-07', 'Alwin Kuruvilla', 50, 1);
+
+INSERT INTO Supplies
+    (SupplyID, SupplyName, SupplyUnit)
+VALUES
+    (1, 'Wildberry Ale', 'liters'),
+    (2, 'Sharkbear Meat', 'kilograms'),
+    (3, 'Squirrelrat Meat', 'kilograms'),
+    (4, 'Purple Pumpkin Pie', 'pies'),
+    (5, 'Tripleboot Ale', 'liters'),
+    (6, 'Blue Forest Lager', 'liters'),
+    (7, 'Pinefinger Nuts', 'kilograms')
+
+
+INSERT INTO Inventory
+    (InventoryID, TavernID, SupplyID, DateUpdated, Count)
+VALUES
+    (1, 2, 1)
