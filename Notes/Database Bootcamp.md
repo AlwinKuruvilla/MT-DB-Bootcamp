@@ -3,7 +3,8 @@
 ## Built-in Functions
 You can perform functions within the SELECT clause by typing in the desired equation after it.
 Ex:
-```SELECT Price + (Price * 0.07) AS 'Total Price'
+```sql
+SELECT Price + (Price * 0.07) AS 'Total Price'
 ```
 
 ## Order of Commands
