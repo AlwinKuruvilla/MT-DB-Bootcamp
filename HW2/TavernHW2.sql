@@ -15,26 +15,43 @@ DROP TABLE Rats;
 ALTER TABLE UserRoles ADD FOREIGN KEY (UserID) REFERENCES Users;
 ALTER TABLE UserRoles ADD FOREIGN KEY (RoleID) REFERENCES Roles;
 
+ALTER TABLE Services ALTER COLUMN ServiceID int NOT NULL; -- Do I need to add "GO" after this?
 ALTER TABLE Services ADD PRIMARY KEY (ServiceID);
 
+ALTER TABLE Sales ALTER COLUMN SalesID int NOT NULL;
 ALTER TABLE Sales ADD PRIMARY KEY (SalesID);
 ALTER TABLE Sales ADD FOREIGN KEY (TavernID) REFERENCES Taverns;
 ALTER TABLE Sales DROP COLUMN ServiceID;
 
+ALTER TABLE ServiceStatus ALTER COLUMN StatusID int NOT NULL;
 ALTER TABLE ServiceStatus ADD PRIMARY KEY (StatusID);
 ALTER TABLE ServiceStatus ADD FOREIGN KEY (ServiceID) REFERENCES Services;
 
+ALTER TABLE Supplies ALTER COLUMN SupplyID int NOT NULL;
 ALTER TABLE Supplies ADD PRIMARY KEY (SupplyID);
 
+ALTER TABLE Inventory ALTER COLUMN InventoryID int NOT NULL;
 ALTER TABLE Inventory ADD PRIMARY KEY (InventoryID);
 ALTER TABLE Inventory ADD FOREIGN KEY (TavernID) REFERENCES Taverns;
 ALTER TABLE Inventory ADD FOREIGN KEY (SupplyID) REFERENCES Supplies;
 
+ALTER TABLE Receivables ALTER COLUMN ReceivablesID int NOT NULL;
 ALTER TABLE Receivables ADD PRIMARY KEY (ReceivablesID);
 ALTER TABLE Receivables ADD FOREIGN KEY (SupplyID) REFERENCES Supplies;
 ALTER TABLE Receivables ADD FOREIGN KEY (TavernID) REFERENCES Taverns;
 
--- Create new tables
+
+--Drop tables for HW2
+DROP TABLE IF EXISTS GuestLevelClass;
+DROP TABLE IF EXISTS Guests;
+DROP TABLE IF EXISTS LevelClass;
+DROP TABLE IF EXISTS Level;
+DROP TABLE IF EXISTS Class;
+DROP TABLE IF EXISTS GuestStatus;
+DROP TABLE IF EXISTS ServiceSales;
+DROP TABLE IF EXISTS InventorySales;
+
+-- Create tables for HW2
 CREATE TABLE InventorySales
 (
     InventorySalesID int IDENTITY (1, 1) PRIMARY KEY,
@@ -68,9 +85,9 @@ CREATE TABLE Level
 
 CREATE TABLE LevelClass
 (
-    LevelClassID int IDENTITY (1,1) PRIMARY KEY,
-    Level int FOREIGN KEY REFERENCES Level,
-    Class nvarchar(50) FOREIGN KEY REFERENCES Class
+    LevelClassID int IDENTITY (1,1) PRIMARY KEY, -- Is this needed?
+    Level int FOREIGN KEY REFERENCES Level,      -- Can this be used with ClassID to make PK?
+    ClassID int FOREIGN KEY REFERENCES Class
 );
 
 CREATE TABLE Guests
@@ -90,3 +107,98 @@ CREATE TABLE GuestLevelClass
     GuestID int FOREIGN KEY REFERENCES Guests,
     LevelClassID int FOREIGN KEY REFERENCES LevelClass
 );
+
+-- Insertions for new tables
+INSERT INTO InventorySales
+    (TavernID, SalesID)
+VALUES
+    (1, 1),
+    (1, 2),
+    (1, 4),
+--     (2, 5), --Fails because SalesID=5 does not exist
+--     (6, 1), --Fails because TavernID=6 does not exist
+    (2, 4),
+    (2, 3);
+
+INSERT INTO ServiceSales
+    (ServiceID, SalesID)
+VALUES
+    (7, 1),
+    (5, 1),
+    (2, 4),
+    (3, 4),
+    (4, 1),
+    (4, 2),
+--     (8, 2), -- Fails because ServiceID=8 does not exist
+--     (1, 5), --Fails becaues SalesID=5 does not exist
+    (1, 3);
+
+INSERT INTO GuestStatus
+    (StatusName)
+VALUES
+    ('Fine'),
+    ('Sick'),
+    ('Hangry'),
+    ('Raging'),
+    ('Placid'),
+    ('Damp');
+
+INSERT INTO Class
+    (ClassName)
+VALUES
+    ('Barbarian'),
+    ('Crusader'),
+    ('Demon Hunter'),
+    ('Monk'),
+    ('Wizard'),
+    ('Witch Doctor'),
+    ('Necromancer');
+
+INSERT INTO Level
+    (Level)
+VALUES
+    (10),
+    (20),
+    (30),
+    (40),
+    (50),
+    (60),
+    (70);
+
+INSERT INTO LevelClass
+    (Level, ClassID)
+VALUES
+--     (11, 1), -- Fails because Level=11 does not exist
+    (10, 2),
+--     (20, 8), -- Fails becaues ClassID=8 does not exist
+    (20, 3),
+    (30, 4),
+    (40, 4),
+    (20, 5),
+    (10, 6),
+    (30, 7),
+    (70, 1);
+
+INSERT INTO Guests
+    (GuestName, GuestNotes, GuestBirthday, GuestCakeday, TavernID, StatusID)
+VALUES
+    ('Hyperion', 'Strong and Stoic', '1525-02-16', '1550-03-12', 2, 4),
+    ('Freya', 'Bold and Beautiful', '1527-07-10', '1550-03-12', 2, 3),
+    ('Michael', 'Patient and Righteous', '1526-08-17', '1549-06-19', 4, 1),
+    ('Joan', 'Thoughtful and Devote', '1530-04-15', '1552-01-05', 3, 5),
+    ('Van', 'Quick and Cunning', '1525-10-25', '1545-12-25', 1, 2),
+    ('Artemis', 'Agile and Sly', '1531-12-21', '1543-06-02', 1, 5),
+    ('Apollo', 'Quiet and Resolute', '1502-01-25', '1522-02-28', 5, 5),
+    ('Athena', 'Tenacious and Powerful', '1505-03-03', '1530-11-10', 5, 5);
+
+INSERT INTO GuestLevelClass
+    (GuestID, LevelClassID)
+VALUES
+    (8, 8),
+    (9, 8),
+    (10, 1),
+    (11, 1),
+    (12, 2),
+    (13, 2),
+    (14, 3),
+    (15, 3);
