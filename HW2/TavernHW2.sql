@@ -55,15 +55,15 @@ DROP TABLE IF EXISTS InventorySales;
 CREATE TABLE InventorySales
 (
     InventorySalesID int IDENTITY (1, 1) PRIMARY KEY,
-    TavernID int FOREIGN KEY REFERENCES Taverns,
-    SalesID int FOREIGN KEY REFERENCES Sales
+    TavernID int FOREIGN KEY REFERENCES Taverns(TavernID),
+    SalesID int FOREIGN KEY REFERENCES Sales(SalesID)
 );
 
 CREATE TABLE ServiceSales
 (
     ServicesSalesID int IDENTITY (1, 1) PRIMARY KEY,
-    ServiceID   int FOREIGN KEY REFERENCES Services,
-    SalesID int FOREIGN KEY REFERENCES Sales
+    ServiceID   int FOREIGN KEY REFERENCES Services(ServiceID),
+    SalesID int FOREIGN KEY REFERENCES Sales(SalesID)
 );
 
 CREATE TABLE GuestStatus
@@ -86,8 +86,8 @@ CREATE TABLE Level
 CREATE TABLE LevelClass
 (
     LevelClassID int IDENTITY (1,1) PRIMARY KEY, -- Is this needed?
-    Level int FOREIGN KEY REFERENCES Level,      -- Can this be used with ClassID to make PK?
-    ClassID int FOREIGN KEY REFERENCES Class
+    Level int FOREIGN KEY REFERENCES Level(Level),      -- Can this be used with ClassID to make PK?
+    ClassID int FOREIGN KEY REFERENCES Class(ClassID)
 );
 
 CREATE TABLE Guests
@@ -97,15 +97,15 @@ CREATE TABLE Guests
   GuestNotes nvarchar(50),
   GuestBirthday date,
   GuestCakeday  date,
-  TavernID int FOREIGN KEY REFERENCES Taverns,
-  StatusID  int FOREIGN KEY REFERENCES GuestStatus
+  TavernID int FOREIGN KEY REFERENCES Taverns(TavernID),
+  StatusID  int FOREIGN KEY REFERENCES GuestStatus(StatusID)
 );
 
 CREATE TABLE GuestLevelClass
 (
     GuestLevelClassID   int IDENTITY (1,1) PRIMARY KEY,
-    GuestID int FOREIGN KEY REFERENCES Guests,
-    LevelClassID int FOREIGN KEY REFERENCES LevelClass
+    GuestID int FOREIGN KEY REFERENCES Guests(GuestID),
+    LevelClassID int FOREIGN KEY REFERENCES LevelClass(LevelClassID)
 );
 
 -- Insertions for new tables
