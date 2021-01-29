@@ -1,4 +1,4 @@
-,DROP TABLE IF EXISTS RoomStays;
+DROP TABLE IF EXISTS RoomStays;
 DROP TABLE IF EXISTS Rooms;
 DROP TABLE IF EXISTS RoomStatus;
 
@@ -9,7 +9,7 @@ CREATE TABLE RoomStatus (
 
 
 CREATE TABLE Rooms (
-    RoomNumber int,
+    RoomNumber int UNIQUE NOT NULL ,
     RoomStatusID int FOREIGN KEY REFERENCES RoomStatus,
     TavernID int FOREIGN KEY REFERENCES Taverns,
     CONSTRAINT PK_Rooms PRIMARY KEY (TavernID, RoomNumber)
@@ -19,7 +19,7 @@ CREATE TABLE RoomStays (
     RoomStayID int PRIMARY KEY,
     SaleID int FOREIGN KEY REFERENCES Sales(SalesID),
     GuestID int FOREIGN KEY REFERENCES Guests,
-    PK_Rooms int FOREIGN KEY REFERENCES Rooms,
+    PK_Rooms int FOREIGN KEY REFERENCES Rooms(PK_Rooms), -- Why doesn't this work.
     CheckIn date,
     CheckOut date,
     Rate decimal (10,2)
@@ -39,6 +39,8 @@ INSERT INTO Rooms
 VALUES
     (101, 2, 3),
     (101, 2, 4)
+
+
 
 /*
  1. The system should also be able to track Rooms. Rooms should have a status and an associated tavern. There should be a way to track Room Stays which will contain a sale, guest, room, the date it was stayed in and the rate
