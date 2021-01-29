@@ -1,6 +1,6 @@
 -- Add Primary and Foreign Keys to Existing Tables
 
-ALTER TABLE  Locations ADD PRIMARY KEY (LocationID);
+ALTER TABLE Locations ADD PRIMARY KEY (LocationID);
 
 ALTER TABLE Users ADD PRIMARY KEY (UserID);
 
@@ -15,27 +15,33 @@ DROP TABLE Rats;
 ALTER TABLE UserRoles ADD FOREIGN KEY (UserID) REFERENCES Users;
 ALTER TABLE UserRoles ADD FOREIGN KEY (RoleID) REFERENCES Roles;
 
-ALTER TABLE Services ALTER COLUMN ServiceID int NOT NULL; -- Do I need to add "GO" after this?
+ALTER TABLE Services ALTER COLUMN ServiceID int NOT NULL;
+GO-- Do I need to add "GO" after this?
 ALTER TABLE Services ADD PRIMARY KEY (ServiceID);
 
 ALTER TABLE Sales ALTER COLUMN SalesID int NOT NULL;
+GO
 ALTER TABLE Sales ADD PRIMARY KEY (SalesID);
 ALTER TABLE Sales ADD FOREIGN KEY (TavernID) REFERENCES Taverns;
 ALTER TABLE Sales DROP COLUMN ServiceID;
 
 ALTER TABLE ServiceStatus ALTER COLUMN StatusID int NOT NULL;
+GO
 ALTER TABLE ServiceStatus ADD PRIMARY KEY (StatusID);
 ALTER TABLE ServiceStatus ADD FOREIGN KEY (ServiceID) REFERENCES Services;
 
 ALTER TABLE Supplies ALTER COLUMN SupplyID int NOT NULL;
+GO
 ALTER TABLE Supplies ADD PRIMARY KEY (SupplyID);
 
 ALTER TABLE Inventory ALTER COLUMN InventoryID int NOT NULL;
+GO
 ALTER TABLE Inventory ADD PRIMARY KEY (InventoryID);
 ALTER TABLE Inventory ADD FOREIGN KEY (TavernID) REFERENCES Taverns;
 ALTER TABLE Inventory ADD FOREIGN KEY (SupplyID) REFERENCES Supplies;
 
 ALTER TABLE Receivables ALTER COLUMN ReceivablesID int NOT NULL;
+GO
 ALTER TABLE Receivables ADD PRIMARY KEY (ReceivablesID);
 ALTER TABLE Receivables ADD FOREIGN KEY (SupplyID) REFERENCES Supplies;
 ALTER TABLE Receivables ADD FOREIGN KEY (TavernID) REFERENCES Taverns;
@@ -78,18 +84,6 @@ CREATE TABLE Class
     ClassName nvarchar(50)
 );
 
-CREATE TABLE Level
-(
-    Level   int PRIMARY KEY
-);
-
-CREATE TABLE LevelClass
-(
-    LevelClassID int IDENTITY (1,1) PRIMARY KEY, -- Is this needed?
-    Level int FOREIGN KEY REFERENCES Level(Level),      -- Can this be used with ClassID to make PK?
-    ClassID int FOREIGN KEY REFERENCES Class(ClassID)
-);
-
 CREATE TABLE Guests
 (
   GuestID   int IDENTITY (1, 1) PRIMARY KEY,
@@ -103,9 +97,10 @@ CREATE TABLE Guests
 
 CREATE TABLE GuestLevelClass
 (
-    GuestLevelClassID   int IDENTITY (1,1) PRIMARY KEY,
     GuestID int FOREIGN KEY REFERENCES Guests(GuestID),
-    LevelClassID int FOREIGN KEY REFERENCES LevelClass(LevelClassID)
+    ClassID int FOREIGN KEY REFERENCES Class(ClassID),
+    ClassLevel int
+    CONSTRAINT PK_GuestLevelClass PRIMARY KEY (GuestID, ClassID, ClassLevel)
 );
 
 -- Insertions for new tables
@@ -154,30 +149,6 @@ VALUES
     ('Witch Doctor'),
     ('Necromancer');
 
-INSERT INTO Level
-    (Level)
-VALUES
-    (10),
-    (20),
-    (30),
-    (40),
-    (50),
-    (60),
-    (70);
-
-INSERT INTO LevelClass
-    (Level, ClassID)
-VALUES
---     (11, 1), -- Fails because Level=11 does not exist
-    (10, 2),
---     (20, 8), -- Fails becaues ClassID=8 does not exist
-    (20, 3),
-    (30, 4),
-    (40, 4),
-    (20, 5),
-    (10, 6),
-    (30, 7),
-    (70, 1);
 
 INSERT INTO Guests
     (GuestName, GuestNotes, GuestBirthday, GuestCakeday, TavernID, StatusID)
@@ -192,13 +163,15 @@ VALUES
     ('Athena', 'Tenacious and Powerful', '1505-03-03', '1530-11-10', 5, 5);
 
 INSERT INTO GuestLevelClass
-    (GuestID, LevelClassID)
+    (GuestID, ClassID, ClassLevel)
 VALUES
-    (8, 8),
-    (9, 8),
-    (10, 1),
-    (11, 1),
-    (12, 2),
-    (13, 2),
-    (14, 3),
-    (15, 3);
+    --(8, 8, 25),
+    --(9, 8, 12),
+    (1, 1, 56),
+    (2, 1, 38),
+    (3, 2, 50),
+    (4, 2, 61),
+    (4, 3, 42),
+    (5, 3, 9);
+
+DROP TABLE GuestLevelClass
