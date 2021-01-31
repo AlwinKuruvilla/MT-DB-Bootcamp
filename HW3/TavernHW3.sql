@@ -127,4 +127,16 @@ FROM GuestLevelClass AS glc
 9. Write a series of INSERT commands that will insert the statuses of one table into another of your choosing using SELECT statements (See our lab in class - The INSERT commands should be generated). It’s ok if the data doesn’t match or make sense! :)
 * Remember, INSERT Commands look like: INSERT INTO Table1 (column1, column2) VALUES (column1, column2)
  */
-
+CREATE TABLE GuestInfo (
+    GuestName nvarchar(50),
+    ClassName nvarchar(50),
+    ClassLevel int,
+    TavernName nvarchar(50)
+);
+INSERT INTO GuestInfo
+SELECT GuestName, ClassName, ClassLevel, TavernName
+FROM GuestLevelClass AS glc
+    JOIN Guests AS g ON glc.GuestID = g.GuestID
+    JOIN Class C on glc.ClassID = C.ClassID
+    JOIN Taverns T on T.TavernID = g.TavernID
+;
