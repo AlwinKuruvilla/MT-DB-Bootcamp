@@ -18,3 +18,28 @@ When creating a select statemnent, you need to make sure that you write these co
 5. HAVING = This allows you filter out entire groups from the result.
 	Note: Use NOT to exclude groups in the filter.
 6. ORDER BY
+
+
+## Query Execution Order
+Although the select statement is written in the order above, the actual execution order is a bit different:
+1. FROM
+2. WHERE
+	- NULL introduces the new logical state of unknown
+	- See 
+3. GROUP BY
+	- MAX
+	- MIN
+	- SUM
+	- AVG
+	- Other [Aggregate Functions](https://docs.microsoft.com/en-us/sql/t-sql/functions/aggregate-functions-transact-sql)
+4. HAVING
+5. SELECT
+6. ORDER BY
+7. OFFSET - FETCH (This is similar to TOP in SQL Server)
+
+
+
+## JOINs
+- JOINs are cartesian products of two or more tables. This is called the CROSS JOIN.
+- INNER JOINs (Or just JOIN) eliminates those columns that do not match.
+- OUTER JOIN returns the remaining rows from the reserve table (either LEFT or RIGHT)
