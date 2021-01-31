@@ -108,10 +108,23 @@ SELECT StatusID, StatusName
 FROM GuestStatus
 
 -- 8. Write a query that returns Guest Classes with Levels and Generate a new column with a label for their level grouping (lvl 1-10, 10-20, etc)
-SELECT *
-FROM GuestLevelClass
-/*
+SELECT GuestName, ClassName, ClassLevel,
+    CASE
+        WHEN ClassLevel >= 1 AND ClassLevel <= 10 THEN '1-10'
+        WHEN ClassLevel >= 11 AND ClassLevel <= 20 THEN '11-20'
+        WHEN ClassLevel >= 21 AND ClassLevel <= 30 THEN '21-30'
+        WHEN ClassLevel >= 31 AND ClassLevel <= 40 THEN '31-40'
+        WHEN ClassLevel >= 41 AND ClassLevel <= 50 THEN '41-50'
+        WHEN ClassLevel >= 51 AND ClassLevel <= 60 THEN '51-60'
+        WHEN ClassLevel >= 61 AND ClassLevel <= 70 THEN '61-70'
+        ELSE 'MAXED OUT'
+    END AS LevelGroup
+FROM GuestLevelClass AS glc
+    JOIN Guests AS g ON glc.GuestID = g.GuestID
+    JOIN Class C on glc.ClassID = C.ClassID;
 
+/*
 9. Write a series of INSERT commands that will insert the statuses of one table into another of your choosing using SELECT statements (See our lab in class - The INSERT commands should be generated). It’s ok if the data doesn’t match or make sense! :)
 * Remember, INSERT Commands look like: INSERT INTO Table1 (column1, column2) VALUES (column1, column2)
  */
+
