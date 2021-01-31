@@ -1,3 +1,7 @@
+CREATE DATABASE TavernDB;
+GO;
+USE TavernDB;
+GO;
 -------------------
 --DROPPING TABLES--
 -------------------

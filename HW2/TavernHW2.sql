@@ -1,3 +1,4 @@
+USE TavernDB;
 -- Add Primary and Foreign Keys to Existing Tables
 
 ALTER TABLE Locations ADD PRIMARY KEY (LocationID);
@@ -173,5 +174,3 @@ VALUES
     (4, 2, 61),
     (4, 3, 42),
     (5, 3, 9);
-
-DROP TABLE GuestLevelClass
