@@ -57,10 +57,51 @@ SELECT GuestName, CheckIn, CheckOut
 FROM Guests G
     JOIN RoomStays RS on G.GuestID = RS.GuestID
 WHERE (CheckIn < '2012-07-21') AND
-      (CheckOut > '2012-04-14')
+      (CheckOut > '2012-04-14');
 
 -- 9. Using the additional queries provided, take the lab’s SELECT ‘CREATE query’ and add any IDENTITY and PRIMARY KEY constraints to it.
+SELECT CONCAT('CREATE TABLE ',TABLE_NAME, ' (') as queryPiece
+FROM INFORMATION_SCHEMA.TABLES
+    WHERE TABLE_NAME = 'Taverns'
 
+UNION ALL
+
+
+SELECT
+       CONCAT(
+            cols.COLUMN_NAME,
+            ' ',
+            cols.DATA_TYPE,
+            (CASE
+                WHEN CHARACTER_MAXIMUM_LENGTH IS NOT NULL
+                THEN CONCAT('(', CAST(CHARACTER_MAXIMUM_LENGTH as varchar(100)), ')')
+                ELSE ''
+            END),
+	        (CASE
+	            WHEN refConst.CONSTRAINT_NAME IS NOT NULL
+                THEN (CONCAT(' FOREIGN KEY REFERENCES ', constKeys.TABLE_NAME, '(', constKeys.COLUMN_NAME, ')'))
+                ELSE ''
+            END),
+	        (CASE
+	            WHEN refConst.CONSTRAINT_NAME IS NULL AND keys.COLUMN_NAME IS NOT NULL
+                THEN ' PRIMARY KEY'
+                ELSE ''
+            END),
+            ',') as queryPiece
+FROM INFORMATION_SCHEMA.COLUMNS cols
+    LEFT JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE keys
+        ON (keys.TABLE_NAME = cols.TABLE_NAME AND keys.COLUMN_NAME = cols.COLUMN_NAME)
+    LEFT JOIN INFORMATION_SCHEMA.REFERENTIAL_CONSTRAINTS refConst
+        ON (refConst.CONSTRAINT_NAME = keys.CONSTRAINT_NAME)
+    LEFT JOIN
+            (SELECT DISTINCT CONSTRAINT_NAME, TABLE_NAME, COLUMN_NAME
+            FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE) as constKeys
+        ON (constKeys.CONSTRAINT_NAME = refConst.UNIQUE_CONSTRAINT_NAME)
+WHERE cols.TABLE_NAME = 'Taverns'
+
+UNION ALL
+
+SELECT ')';
 
 /*
 For Number 9:
