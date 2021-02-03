@@ -64,10 +64,7 @@ WHERE (CheckIn < '2012-07-21')
 SELECT CONCAT('CREATE TABLE ', TABLE_NAME, ' (') as queryPiece
 FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_NAME = 'Taverns'
-
 UNION ALL
-
-
 SELECT CONCAT(
                cols.COLUMN_NAME,
                ' ',
