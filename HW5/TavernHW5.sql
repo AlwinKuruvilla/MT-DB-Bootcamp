@@ -53,6 +53,8 @@ SELECT dbo.grouping([GLC.ClassLevel]) AS 'Level Grouping'
 FROM TavernDB.dbo.GuestLevelClass
 
 -- 5. Write a function that returns a report of all open rooms (not used) on a particular day (input) and which tavern they belong to
-
+SELECT RoomNumber, RoomStatusName, *
+FROM TavernDB.dbo.Rooms R
+JOIN RoomStatus RS on RS.RoomStatusID = R.RoomStatusID
 -- 6. Modify the same function from 5 to instead return a report of prices in a range (min and max prices) - Return Rooms and their taverns based on price inputs
 -- 7. Write a command that uses the result from 6 to Create a Room in another tavern that undercuts (is less than) the cheapest room by a penny - thereby making the new room the cheapest one
