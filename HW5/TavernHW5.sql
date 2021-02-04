@@ -87,3 +87,9 @@ RETURN
 
 SELECT * FROM dbo.PriceRange (44.00, 75.00)
 -- 7. Write a command that uses the result from 6 to Create a Room in another tavern that undercuts (is less than) the cheapest room by a penny - thereby making the new room the cheapest one
+INSERT INTO RoomStays
+    (SaleID, GuestID, RoomID, CheckIn, CheckOut, Rate)
+VALUES
+    (24, 3, 9, '2012-10-23', '2012-10-31',
+        (SELECT MIN(Rate)-0.01 FROM dbo.PriceRange (0, 1000.00))
+     )
