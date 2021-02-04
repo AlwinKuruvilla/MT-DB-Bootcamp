@@ -90,6 +90,6 @@ SELECT * FROM dbo.PriceRange (44.00, 75.00)
 INSERT INTO RoomStays
     (SaleID, GuestID, RoomID, CheckIn, CheckOut, Rate)
 VALUES
-    (24, 3, 9, '2012-10-23', '2012-10-31',
+    (4, 3, 9, '2012-10-23', '2012-10-31',
         (SELECT MIN(Rate)-0.01 FROM dbo.PriceRange (0, 1000.00))
      )
