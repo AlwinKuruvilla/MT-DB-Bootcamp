@@ -70,4 +70,20 @@ RETURN
 
 SELECT * FROM dbo.OpenRooms ('2012-05-11')
 -- 6. Modify the same function from 5 to instead return a report of prices in a range (min and max prices) - Return Rooms and their taverns based on price inputs
+IF OBJECT_ID (N'dbo.PriceRange', N'IF') IS NOT NULL
+    DROP FUNCTION dbo.PriceRange;
+GO
+CREATE FUNCTION dbo.PriceRange (@minPrice decimal, @maxPrice decimal)
+RETURNS TABLE
+AS
+RETURN
+        (
+            SELECT RoomNumber, TavernName, Rate
+            FROM TavernDB.dbo.Rooms R
+                    JOIN RoomStays S on R.RoomID = S.RoomID
+                    JOIN Taverns T on R.TavernID = T.TavernID
+            WHERE Rate > @minPrice AND Rate < @maxPrice
+        );
+
+SELECT * FROM dbo.PriceRange (44.00, 75.00)
 -- 7. Write a command that uses the result from 6 to Create a Room in another tavern that undercuts (is less than) the cheapest room by a penny - thereby making the new room the cheapest one
